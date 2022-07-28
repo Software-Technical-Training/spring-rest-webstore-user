@@ -40,7 +40,11 @@ public class UserController {
         newUser.setPassword(user.getPassword());
         newUser.setRegistrationDate(new Date());
 
-        return new ResponseEntity<>(userRepository.save(newUser),HttpStatus.CREATED);
+        try {
+            return new ResponseEntity<>(userRepository.save(newUser),HttpStatus.CREATED);            
+        } catch (Exception e) {
+            return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
     }
 
