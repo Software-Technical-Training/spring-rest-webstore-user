@@ -1,0 +1,12 @@
+[
+    {
+      "_class": "com.stti.user.model.User",
+      "username": "seranky",
+      "password": "password"
+    },
+    {
+      "_class": "com.stti.user.model.User",
+      "username": "srikar",
+      "password": "password"
+    }
+]

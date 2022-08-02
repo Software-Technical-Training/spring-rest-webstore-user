@@ -14,46 +14,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.stti.user.model.User;
-import com.stti.user.repository.UserRepository;
+import com.stti.user.service.UserService;
 
 @RestController
 @RequestMapping("/stti")
 public class UserController {
     
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
+
 
     @GetMapping("users/{name}")
-    public ResponseEntity<User> getUserByUsername(@PathVariable("name") String username){
-        User user = userRepository.findUserByUsername(username);
-        if(user != null){
-            return new ResponseEntity<>(user,HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
+    public ResponseEntity<User> getUserByUsername(@PathVariable("name") String name){
+        return ResponseEntity.of(userService.getUserByUsername(name));
     }
 
     @PostMapping("/users")
     public ResponseEntity<User> addUser(@RequestBody User user){
-        User newUser = new User();
-        newUser.setUsername(user.getUsername());
-        newUser.setPassword(user.getPassword());
-        newUser.setRegistrationDate(new Date());
-
-        try {
-            return new ResponseEntity<>(userRepository.save(newUser),HttpStatus.CREATED);            
-        } catch (Exception e) {
+        user.setRegistrationDate(new Date());
+        User newUser = userService.addUser(user);
+        if(newUser != null)
+            return new ResponseEntity<>(newUser,HttpStatus.CREATED);
+        else
             return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
     }
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers(){
-        return new ResponseEntity<>(userRepository.findAll(),HttpStatus.OK);
+        return new ResponseEntity<>(userService.getAllUsers(),HttpStatus.OK);
     }
-
-
-    
 
 }
