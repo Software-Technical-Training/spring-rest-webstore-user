@@ -1,0 +1,214 @@
+openapi: 3.0.3
+info:
+  title: STTI Webstore User - OpenAPI 3.0
+  description: |-
+    User entity for the webstore application
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: shyam.eranky@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+externalDocs:
+  description: Visit the Github page
+  url: https://github.com/Software-Technical-Training/spring-rest-webstore-user
+servers:
+  - url: http://localhost:8080/stti
+tags:
+  - name: user
+    description: Operations about user
+paths:
+  /user:
+    get:
+      tags:
+        - user
+      summary: Get all users
+      description: Return all users
+      operationId: getAllUsers
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      tags:
+        - user
+      summary: Create user
+      description: Users will need to create a login
+      operationId: createUser
+      requestBody:
+        required: true
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  # /user/login:
+  #   get:
+  #     tags:
+  #       - user
+  #     summary: Logs user into the system
+  #     description: ''
+  #     operationId: loginUser
+  #     parameters:
+  #       - name: username
+  #         in: query
+  #         description: The user name for login
+  #         required: false
+  #         schema:
+  #           type: string
+  #       - name: password
+  #         in: query
+  #         description: The password for login in clear text
+  #         required: false
+  #         schema:
+  #           type: string
+  #     responses:
+  #       '200':
+  #         description: successful operation
+  #         headers:
+  #           X-Rate-Limit:
+  #             description: calls per hour allowed by the user
+  #             schema:
+  #               type: integer
+  #               format: int32
+  #           X-Expires-After:
+  #             description: date in UTC when token expires
+  #             schema:
+  #               type: string
+  #               format: date-time
+  #         content:
+  #           application/xml:
+  #             schema:
+  #               type: string
+  #           application/json:
+  #             schema:
+  #               type: string
+  #       '400':
+  #         description: Invalid username/password supplied
+  # /user/logout:
+  #   get:
+  #     tags:
+  #       - user
+  #     summary: Logs out current logged in user session
+  #     description: ''
+  #     operationId: logoutUser
+  #     parameters: []
+  #     responses:
+  #       default:
+  #         description: successful operation
+  /user/{username}:
+    get:
+      tags:
+        - user
+      summary: Get user by user name
+      description: ''
+      operationId: getUserByName
+      parameters:
+        - name: username
+          in: path
+          description: 'The name that needs to be fetched. Use user1 for testing. '
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'          
+    put:
+      tags:
+        - user
+      summary: Update user
+      description: This can only be done by the logged in user.
+      operationId: updateUser
+      parameters:
+        - name: username
+          in: path
+          description: name that need to be updated
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an existent user in the store
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'          
+    delete:
+      tags:
+        - user
+      summary: Delete user
+      description: This can only be done by the logged in user.
+      operationId: deleteUser
+      parameters:
+        - name: username
+          in: path
+          description: The name that needs to be deleted
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          description: successful operation
+components:
+  schemas:
+    User:
+      type: object
+      required: [username,password]
+      properties:
+        id:
+          type: string
+          example: uuid
+        username:
+          type: string
+          example: theUser
+          minLength: 3
+          maxLength: 20
+        firstname:
+          type: string
+          example: John
+        lastname:
+          type: string
+          example: James
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: '12345'
+          minLength: 3
+          maxLength: 20
+        phone:
+          type: string
+          pattern: '^\d{3}-\d{3}-\d{4}$'
+          example: '480-345-8971'  
+        # userStatus:
+        #   type: string
+        #   enum:
+        #     - ACTIVE
+        #     - PAUSED
+        #     - REMOVED
+        #   description: User Status
