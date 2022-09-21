@@ -1,6 +1,6 @@
 runtime: java17
 env_variables:
-  mongodb.host: "stti-test.dal35zw.mongodb.net"
-  mongodb.db: "stti-test"
-  mongodb.username: "stti-test"
-  mongodb.password: "stti-pass"
+  mongodb_host: "stti-test.dal35zw.mongodb.net"
+  mongodb_db: "stti-test"
+  mongodb_username: "stti-test"
+  mongodb_password: "stti-pass"
