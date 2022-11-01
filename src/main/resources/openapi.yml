@@ -185,7 +185,8 @@ components:
         username:
           type: string
           example: theUser
-          minLength: 3
+          pattern: '^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$'
+          minLength: 5
           maxLength: 20
         firstname:
           type: string
