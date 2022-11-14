@@ -20,10 +20,14 @@ import com.stti.user.repository.UserRepository;
 @Service
 public class UserService implements UserApiDelegate{
     
-    @Autowired
     UserRepository userRepository;
 
     private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
+
+    @Autowired
+    public UserService(UserRepository repo){
+        this.userRepository = repo;
+    }
 
     public ResponseEntity<List<UserDto>> getAllUsers() {
         List<User> users = userRepository.findAll();
