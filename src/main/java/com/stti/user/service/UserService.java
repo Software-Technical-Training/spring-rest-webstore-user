@@ -20,11 +20,10 @@ import com.stti.user.repository.UserRepository;
 @Service
 public class UserService implements UserApiDelegate{
     
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
     private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
-    @Autowired
     public UserService(UserRepository repo){
         this.userRepository = repo;
     }
