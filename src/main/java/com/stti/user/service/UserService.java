@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.mapstruct.factory.Mappers;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.stti.user.error.UserNotFoundException;
 import com.stti.user.mapper.UserMapper;
 import com.stti.user.model.User;
 import com.stti.user.openapi.api.UserApiDelegate;
@@ -45,7 +45,6 @@ public class UserService implements UserApiDelegate{
         user.setLastUpdated(dt);
         System.out.println(user.toString());
         User newUser = userRepository.save(user);
-        
         return new ResponseEntity<UserDto>(userMapper.toUserDto(newUser),HttpStatus.CREATED);
     }
 
@@ -65,7 +64,7 @@ public class UserService implements UserApiDelegate{
             userRepository.delete(user.get());
             return new ResponseEntity<>(HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        throw new UserNotFoundException(username);
     }
 
     /**
@@ -78,12 +77,12 @@ public class UserService implements UserApiDelegate{
      *         or User not found (status code 404)
      * @see UserApi#getUserByName
      */
-    public ResponseEntity<UserDto> getUserByName(String username) {
+    public ResponseEntity<UserDto> getUserByName(String username)  {
         Optional<User> user = userRepository.findUserByUsername(username);
         if(user.isPresent()){
             return new ResponseEntity<>(userMapper.toUserDto(user.get()),HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        throw new UserNotFoundException(username);
     }
 
     /**
@@ -110,7 +109,7 @@ public class UserService implements UserApiDelegate{
             userRepository.save(updatedUser);
             return new ResponseEntity<UserDto>(userMapper.toUserDto(updatedUser),HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        throw new UserNotFoundException(username);
     }
 
 }

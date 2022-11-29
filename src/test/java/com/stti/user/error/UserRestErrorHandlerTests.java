@@ -40,6 +40,18 @@ public class UserRestErrorHandlerTests {
 
     }
 
+    /**
+     * TODO 
+     * testHandleMethodArgumentNotValidPasswordMissing
+     * testHandleMethodArgumentNotValidUsernameInvalid
+     * testHandleMethodArgumentNotValidUsernameMinLengthViolation
+     * testHandleMethodArgumentNotValidUsernameMaxLengthViolation
+     * testHandleMethodArgumentNotValidPhoneInvalid
+     * testHandleMethodArgumentNotValidEmailInvalid
+     * 
+     */
+
+
     
     
 }

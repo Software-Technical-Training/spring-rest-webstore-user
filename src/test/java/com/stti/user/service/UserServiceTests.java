@@ -65,4 +65,11 @@ public class UserServiceTests {
         assertEquals(createdUser.getPassword(), "password");
 
     }
+
+    /**
+     * TODO
+     * testGetUserByName
+     * testDeleteUser
+     * testUpdateUser
+     */
 }

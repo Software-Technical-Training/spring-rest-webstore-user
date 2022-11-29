@@ -13,6 +13,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -22,6 +24,29 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ControllerAdvice
 public class UserRestErrorHandler extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(Exception.class)
+    @ResponseBody
+    public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
+        return new ResponseEntity<>(ex.getCause(),HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    @ResponseBody
+    public final ResponseEntity<Object> handleUserNotFoundException(Exception ex, WebRequest request) {
+        ApiError error = new ApiError("username", ((UserNotFoundException)ex).getUsername(), "does not exist.");
+        ApiErrorResponse errorResponse = new ApiErrorResponse(List.of(error));
+        ObjectMapper objMapper = new ObjectMapper();
+            
+        try {
+            return new ResponseEntity<>(objMapper.writeValueAsString(errorResponse),HttpStatus.BAD_REQUEST);
+        } catch (JsonProcessingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+}
+
 
     @Override
     protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status,
